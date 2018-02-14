@@ -25,7 +25,7 @@ module I18n
 
       module ConfigExtension
         def global_scope
-          @global_scope
+          @global_scope.is_a?(Proc) ? @global_scope.call : @global_scope
         end
 
         def global_scope=(scope)

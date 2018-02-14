@@ -20,32 +20,15 @@ describe I18n::Backend::GlobalScope do
     end
   end
 
-  context 'when global scope is given' do
+  context 'when a static global scope is given' do
     let(:global_scope) { 'prefix' }
 
-    before do
-      I18n.global_scope = global_scope
-    end
+    it_behaves_like 'a global scope backend'
+  end
 
-    context 'when scoped key does not exist' do
-      before do
-        store_translations(:en, foo: 'foo')
-      end
+  context 'when a dynamic (Proc) global scope is given' do
+    let(:global_scope) { -> { 'pre' + 'fix' } }
 
-      it 'returns translation for unscoped key' do
-        expect(I18n.t('foo')).to eq 'foo'
-      end
-    end
-
-    context 'when both scoped and not-scoped key exist' do
-      before do
-        store_translations(:en, global_scope => { foo: 'prefixed_foo', bar: { baz: 'prefixed_baz' } }, foo: 'foo', bar: { baz: 'baz' })
-      end
-
-      it 'returns translation for scoped key' do
-        expect(I18n.t('foo')).to eq 'prefixed_foo'
-        expect(I18n.t('bar.baz')).to eq 'prefixed_baz'
-      end
-    end
+    it_behaves_like 'a global scope backend'
   end
 end
